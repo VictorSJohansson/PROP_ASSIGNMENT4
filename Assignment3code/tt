@@ -1,0 +1,11 @@
+sentence(sentence(NP, VP)) -->
+			noun_phrase(Num, NP), verb_phrase(Num, VP).
+
+
+expression([Value])->
+	value(Value).
+
+expression([Value|Expression]) -->
+	value(Value), expressin2(Expression).
+
+expression2()

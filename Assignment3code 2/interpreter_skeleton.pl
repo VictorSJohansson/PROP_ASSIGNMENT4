@@ -77,67 +77,11 @@ parse(-ParseTree)-->
 	and returning a parse tree.
 ***/
 
-parse([])-->[].
-parse(ParseTree, Program, [])--> assign(Program), assign(ParseTree).
-assign(assignment(ident(X), '=', Exp))--> identifier(X), [=], expr(Exp), [';'].
-expr(expression(Term))--> term(Term).
-expr(expression(Term, Operator, Expr))-->term(Term), operator(Operator), expr(Expr).
-term(term(Factor, Operator, Term))-->factor(Factor), operator(Operator), term(Term).
-term(term(Factor))-->factor(Factor).
-factor(factor(X))-->int(X).
-factor(factor(X))-->id(X).
-factor(factor(Expr))-->['('], expr(Expr), [')'].
-
-operator(plus)-->['+'].
-operator(minus)-->['-'].
-operator(divide)-->['/'].
-operator(multiply)-->['*'].
-leftparen(paren)-->['('].
-rightparen(paren)-->[')'].
-
-identifier(X)--> [X], {atom(X)}.
-int(X)--> [X], {integer(X)}.
-
-
-/*** evaluator ***/
-
-evaluate(ParseTree, [], VariablesOut):- 
-evaluate(X, X):- number(X).
-evaluate(X + Y, Z):- evaluate(X, Xs), evaluate(Y, Ys), Z is Xs + Ys.
-evaluate(X - Y, Z):- evaluate(X, Xs), evaluate(Y, Ys), Z is Xs - Ys.
-evaluate(X * Y, Z):- evaluate(X, Xs), evaluate(Y, Ys), Z is Xs * Ys.
-evaluate(X / Y, Z):- evaluate(X, Xs), evaluate(Y, Ys), Z is Xs / Ys.
-
-/*** 
-block = ‘{’ , stmts , ‘}’ ;
-stmts = [ assign , stmts ] ;
-assign = id , ‘=’ , expr , ‘;’ ;
-expr = term , [ ( ‘+’ | ‘−’ ) , expr ] ;
-term = factor , [ ( ‘*’ | ‘/’ ) , term ] ;
-factor = int | id | ‘(’ , expr , ‘)’ ;
-where id is defined as (a..z)+ and int is defined as
- ***/
 	
 /***
 evaluate(+ParseTree,+VariablesIn,-VariablesOut):-
 	TODO: Implement an evaluate predicate that evaluates a parse-tree and 
 	returns the state of the program after evaluation as a list of variables and 
 	their values.
-
-evaluator i slutet tar in [a = 3, b = 4]
-
-
-[_, var=val]
-_ = inte första elementet i listan
-
-
-lecture 13, example 3, page 21
-non-tail recrsice
-
-sum([],0)
-
-
-package control
-sublimerpl
-sicstus
 ***/
+

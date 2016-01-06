@@ -13,9 +13,12 @@ block(X):-left_curly(X), stmts(X), right_curly(X).
 stms(X):-assign(X), stmts(X).
 stmts(X):-NULL?!
 
-assign(X):-id(X), equals(X), expr(X), semicol(X).
+assign([X|Xs]):-id(X), equals(X), expr(X), semicol(X).
 
-expr(X):-term(X), plus(X), expr(X).
+expr(X):-term(X), operator(X), expr(X).
+
+
+
 expr(X):-term(X), minus(X), expr(X).
 expr(X):-term(X).
 
