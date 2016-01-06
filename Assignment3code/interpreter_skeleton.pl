@@ -75,18 +75,20 @@ write_list(Stream,[Ident = Value|Vars]):-
 parse(-ParseTree)-->
 	TODO: Implement a definite clause grammar defining our programming language,
 	and returning a parse tree.
-***/
 
-parse([])-->[].
-parse(ParseTree, Program, [])--> assign(Program), assign(ParseTree).
+
+parse([])-->[].***/
+parse(ParseTree, [X], [])--> assign([X|X2],[X2|X3], [X3]), assign(ParseTree).
 assign(assignment(ident(X), '=', Exp))--> identifier(X), [=], expr(Exp), [';'].
 expr(expression(Term))--> term(Term).
 expr(expression(Term, Operator, Expr))-->term(Term), operator(Operator), expr(Expr).
-term(term(Factor, Operator, Term))-->factor(Factor), operator(Operator), term(Term).
+term(term([X, Y | W]))-->factor(X), operator(Y), term(W).
 term(term(Factor))-->factor(Factor).
 factor(factor(X))-->int(X).
 factor(factor(X))-->id(X).
 factor(factor(Expr))-->['('], expr(Expr), [')'].
+
+removehead([_|Tail], Tail).
 
 operator(plus)-->['+'].
 operator(minus)-->['-'].
@@ -100,8 +102,8 @@ int(X)--> [X], {integer(X)}.
 
 
 /*** evaluator ***/
-
-evaluate(ParseTree, [], VariablesOut):- 
+evaluate([])-->[].
+evaluate([X|Xs], [], VariablesOut):-evaluate([X|Xs], Y), evaluate(Xs, Z), VariablesOut is Y+Z.
 evaluate(X, X):- number(X).
 evaluate(X + Y, Z):- evaluate(X, Xs), evaluate(Y, Ys), Z is Xs + Ys.
 evaluate(X - Y, Z):- evaluate(X, Xs), evaluate(Y, Ys), Z is Xs - Ys.
