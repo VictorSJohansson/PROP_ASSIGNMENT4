@@ -78,14 +78,14 @@ parse(-ParseTree)-->
 
 
 parse([])-->[].***/
-parse(ParseTree, [X], [])--> assign([X|X2],[X2|X3], [X3]), assign(ParseTree).
+parse(X)--> assign(X).
 assign(assignment(ident(X), '=', Exp))--> identifier(X), [=], expr(Exp), [';'].
 expr(expression(Term))--> term(Term).
 expr(expression(Term, Operator, Expr))-->term(Term), operator(Operator), expr(Expr).
-term(term([X, Y | W]))-->factor(X), operator(Y), term(W).
+term(term(X, Y, W))-->factor(X), operator(Y), term(W).
 term(term(Factor))-->factor(Factor).
-factor(factor(X))-->int(X).
-factor(factor(X))-->id(X).
+factor(factor(X))-->number(X).
+factor(factor(X))-->identifier(X).
 factor(factor(Expr))-->['('], expr(Expr), [')'].
 
 removehead([_|Tail], Tail).
@@ -98,7 +98,7 @@ leftparen(paren)-->['('].
 rightparen(paren)-->[')'].
 
 identifier(X)--> [X], {atom(X)}.
-int(X)--> [X], {integer(X)}.
+number(X)--> [X], {integer(X)}.
 
 
 /*** evaluator ***/
